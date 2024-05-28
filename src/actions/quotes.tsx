@@ -14,18 +14,16 @@ export const GetAllQuotes = () => {
   });
 };
 
-export const CreateQuote = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
-  const { authorId, text } = req.body;
-  return prisma.quote.create({
+export default async function CreateQuote(text: any, authorId: any) {
+  const authorIdInt = parseInt(authorId);
+  const quote = await prisma.quote.create({
     data: {
       text,
-      authorId,
+      authorId: authorIdInt,
     },
   });
-};
+  return Response.json({ message: "ok", status: 200, data: quote });
+}
 
 export const UpdateQuote = async (
   req: NextApiRequest,

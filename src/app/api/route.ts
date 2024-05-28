@@ -1,4 +1,4 @@
-import { CreateQuote, GetAllQuotes } from "@/actions/quotes";
+import CreateQuote, { GetAllQuotes, UpdateQuote } from "@/actions/quotes";
 import { NextApiRequestQuery } from "next/dist/server/api-utils";
 import { NextResponse } from "next/server";
 
@@ -12,8 +12,19 @@ export const GET = async () => {
     { status: 404 }
   );
 };
+export const POST = async (req: Request) => {
+  const body = await req.json();
 
-export const POST = async (req: NextApiRequestQuery) => {
-  console.log(req.body);
-  return CreateQuote(authorId, text);
+  const result = await CreateQuote(body.text, body.authorId);
+
+  if (!result)
+    return Response.json({
+      message: "error",
+      status: 500,
+    });
+  return Response.json({ message: "ok", status: 200, data: result });
+};
+
+export const PUT = async (req: NextApiRequestQuery) => {
+  return Response.json({ massage: "ok", status: 200, data: req.query });
 };

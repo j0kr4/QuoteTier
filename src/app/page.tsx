@@ -13,6 +13,7 @@ import { HeartIcon } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import CreateQuoteForm from "@/components/CreateQuote";
+import LikeButton from "@/components/LikeButton";
 
 export default function Home() {
   const [text, setText] = useState("");
@@ -26,14 +27,19 @@ export default function Home() {
     fetchQuotes();
   }, []);
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-
-    axios.post("/api", { authorId, text });
+  const handleSubmit = async (e: any) => {
+    try {
+      await axios.post("/api", { authorId: authorId, text: text });
+    } catch (error) {
+      console.error(
+        "Une erreur est survenue lors de l'envoi de la requête:",
+        error
+      );
+    }
   };
 
   return (
-    <div className="py-8">
+    <div className="container py-8">
       <div className="w-full p-8 flex justify-center items-center">
         <Dialog>
           <DialogTrigger asChild>
@@ -41,7 +47,7 @@ export default function Home() {
               Ajouter une citation
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-xl">
             <DialogHeader>
               <DialogTitle>Ajout citation</DialogTitle>
             </DialogHeader>
@@ -58,7 +64,7 @@ export default function Home() {
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-4 gap-4 p-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-8">
         {data.map((item: any) => (
           <Card
             key={item.id}
@@ -73,15 +79,7 @@ export default function Home() {
                   -{item.author.name}
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Button
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-50"
-                    size="icon"
-                    variant="ghost"
-                  >
-                    <HeartIcon className="w-5 h-5" />
-                    <span className="sr-only">Like</span>
-                  </Button>
-                  {item.likes}
+                  <LikeButton like={item.likes} id={item.id} />
                 </div>
               </div>
             </CardContent>

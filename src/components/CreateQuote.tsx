@@ -30,10 +30,10 @@ const CreateQuoteForm = ({ onQuoteChange, onAuthorChange }: any) => {
     onAuthorChange(author);
   };
   return (
-    <div className="grid gap-4 py-4">
-      <div className="grid grid-cols-4 items-center gap-4">
+    <div className="grid gap-8 py-8">
+      <div className="gap-4">
         <Label htmlFor="name" className="text-right">
-          Citation
+          Citation{" "}
         </Label>
         <Input onChange={handleQuoteChange} id="quote" className="col-span-3" />
       </div>
